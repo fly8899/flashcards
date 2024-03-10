@@ -1,0 +1,21 @@
+[package]
+name = "flashcards"
+version = "0.1.0"
+authors = ["fly8899"]
+edition = "2021"
+build = "build.rs"
+repository = "https://github.com/fly8899/flashcards"
+description = "Application to shuffle flashcards."
+
+[dependencies]
+directories = "5.0"
+slint = "1.4"
+sqlx = { version = "0.7", features = ["runtime-tokio-native-tls", "sqlite"]}
+tokio = { version = "1.35.1", features = ["macros", "rt-multi-thread"]}
+
+[build-dependencies]
+slint-build = "1.4"
+
+[package.metadata.bundle]
+name = "Flashcards"
+identifier = "io.github.fly889.flashcards"

@@ -1,0 +1,49 @@
+import { VerticalBox, ScrollView, TextEdit } from "std-widgets.slint";
+import { Styling, Toolbar } from "components/common.slint";
+import { UiCard } from "../models/ui_card.slint";
+
+export component CardAddView {
+
+    property <string> card-question;
+    property <string> card-answer;
+
+    pure callback show-card-list();
+    pure callback add-card(string, string);
+
+    VerticalBox {
+        Toolbar {
+            has-back: true;
+            has-action: true;
+            title: "Add";
+            on-back-button => {
+                show-card-list();
+            }
+            action-title: "Save";
+            on-action-button => {
+                add-card(card-question, card-answer);
+                show-card-list();
+            }
+        }
+        ScrollView {
+            VerticalBox {
+                Text {
+                    text: "Question:";
+                    font-size: Styling.hint-font-size;
+                }
+                TextEdit {
+                    text <=> card-question;
+                    font-size: Styling.default-font-size;
+                }
+                Text {
+                    text: "Answer:";
+                    font-size: Styling.hint-font-size;
+                }
+                TextEdit {
+                    text <=> card-answer;
+                    font-size: Styling.default-font-size;
+                }
+            }
+        }
+    }
+
+}

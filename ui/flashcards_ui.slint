@@ -1,0 +1,105 @@
+import { CardAddView, CardEditView, CardListView, LessonRunView, LoadingView, ErrorView } from "screens/screens.slint";
+import { ScrollView } from "std-widgets.slint";
+import { UiCard } from "models/ui_card.slint";
+
+export component FlashCardsUi inherits Window {
+
+    in-out property <int> screen: 4;
+    in-out property <[UiCard]> card-list;
+    
+    in-out property <int> card-id;
+    in-out property <string> card-question;
+    in-out property <string> card-answer;
+
+    pure callback show-card-add();
+    pure callback show-card-edit(int, string, string);
+    pure callback show-card-list();
+    pure callback show-lesson();
+
+    pure callback add-card(string, string);
+    pure callback remove-card(int);
+    pure callback save-card-edit(int, string, string);
+
+    pure callback lesson-set-random-card();
+
+    title: "Flashcards";
+    height: 800px;
+    width: 1000px;
+
+    if (screen == 0):
+        ErrorView {
+            height: root.height;
+            width: root.width;
+        }
+    
+    if (screen == 1): 
+        LoadingView {
+            height: root.height;
+            width: root.width;
+        }
+
+    if (screen == 2):
+        CardEditView {
+            height: root.height;
+            width: root.width;
+            card-id <=> card-id;
+            card-question <=> card-question;
+            card-answer <=> card-answer;
+            show-card-list => { 
+                show-card-list();
+            }
+            save-card-edit(id, question, answer) => {
+                save-card-edit(id, question, answer)
+            }
+            remove-card(id) => {
+                remove-card(id);
+            }
+        }
+
+    if (screen == 3): 
+        CardAddView {
+            height: root.height;
+            width: root.width;
+            show-card-list => {
+                show-card-list();
+            }
+            add-card(question, answer) => {
+                add-card(question, answer)
+            }
+        }
+    
+
+    CardListView {
+        height: root.height;
+        width: root.width;
+        visible: screen == 4;
+        card-list <=> card-list;
+        show-card-edit(id, question, answer) => {
+            show-card-edit(id, question, answer);
+        }
+        show-lesson => {
+            show-lesson();
+        }
+        show-card-add => {
+            show-card-add();
+        }
+        remove-card(id) => {
+            remove-card(id);
+        }
+    }
+
+    if (screen == 5):
+        LessonRunView {
+            height: root.height;
+            width: root.width;
+            card-question: card-question;
+            card-answer: card-answer;
+            lesson-set-random-card => {
+                lesson-set-random-card();
+            }
+            show-card-list => {
+                show-card-list();
+            }
+        }
+
+}

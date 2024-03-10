@@ -1,0 +1,83 @@
+import { Button, HorizontalBox } from "std-widgets.slint";
+
+export component DefaultButton inherits Button {
+    width: self.visible ? 110px : 0px;
+}
+
+export component BackButton inherits Button {
+    text: "<";
+    width: self.visible ? self.height : 0px;
+}
+
+export component Divider inherits Rectangle {
+    background: Styling.neutral-color;
+    height: 2px;
+}
+
+export global Styling {
+    out property <length> toolbar-radius: 8px;
+    out property <length> toolbar-height: 50px;
+    out property <length> hint-font-size: 10px;
+    out property <length> default-font-size: 14px;
+    out property <length> default-bigger-font-size: 16px;
+    out property <length> title-font-size: 20px;
+
+    out property <int> title-font-weight: 900;
+
+    out property <color> on-primary-color: Colors.white;
+    out property <color> primary-color: #202020;
+    out property <color> accent-color: Colors.olivedrab;
+    out property <color> neutral-color: #5a5a5a;
+}
+
+export component Toolbar inherits Rectangle {
+    in property <string> title;
+    in property <string> action-title;
+    in property <string> action2-title;
+    in property <bool> has-back: false;
+    in property <bool> has-action: false;
+    in property <bool> has-action2: false;
+
+    callback on-back-button();
+    callback on-action-button();
+    callback on-action2-button();
+
+    height: Styling.toolbar-height;
+    background: Styling.primary-color;
+    border-radius: Styling.toolbar-radius;
+
+    HorizontalBox {
+        BackButton {
+            visible: has-back;
+            clicked => {
+                on-back-button();
+            }
+        }
+        Text {
+            horizontal-alignment: left;
+            vertical-alignment: center;
+            font-size: Styling.title-font-size;
+            font-weight: Styling.title-font-weight;
+            color: Styling.on-primary-color;
+            text: title;
+        }
+        HorizontalLayout {
+            spacing: has-action2 ? 10px : 0px;
+            alignment: end;
+            DefaultButton {
+                visible: has-action;
+                text: action-title;
+                clicked => {
+                    on-action-button();
+                }
+            } 
+            DefaultButton {
+                visible: has-action2;
+                text: action2-title;
+                clicked => {
+                    on-action2-button();
+                }
+            } 
+        }
+    }
+}

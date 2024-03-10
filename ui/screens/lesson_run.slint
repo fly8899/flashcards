@@ -1,0 +1,66 @@
+import { VerticalBox, ScrollView, TextEdit } from "std-widgets.slint";
+import { Styling, Toolbar, DefaultButton, Divider } from "components/common.slint";
+import { UiCard } from "../models/ui_card.slint";
+
+export component LessonRunView  {
+
+    property <bool> lesson-show-answer: false;
+    in property <string> card-question;
+    in property <string> card-answer;
+
+    pure callback lesson-set-random-card();
+    pure callback show-card-list();
+
+    VerticalBox {
+        Toolbar {
+            has-back: true;
+            has-action: !lesson-show-answer;
+            title: "Shuffled Cards";
+            action-title: "Show";
+            on-action-button => {
+                lesson-show-answer = true;
+            }
+            has-action2: lesson-show-answer;
+            action2-title: "Next";
+            on-action2-button => {
+                lesson-show-answer = false;
+                lesson-set-random-card();
+            }
+            on-back-button => {
+                show-card-list();
+            }
+        }
+        ScrollView {
+            VerticalBox {
+                Text {
+                    padding-top: 20px;
+                    text: "Question:";
+                    max-height: 20px;
+                    font-size: Styling.hint-font-size;
+                }
+                Text {
+                    text: card-question;
+                    wrap: word-wrap;
+                    font-size: Styling.default-bigger-font-size;
+                } 
+                Divider {
+                    visible: lesson-show-answer;
+                    padding-top: 20px;
+                }
+                Text {
+                    visible: lesson-show-answer;
+                    padding-top: 20px;
+                    text: "Answer:";
+                    max-height: 20px;
+                    font-size: Styling.hint-font-size;
+                }
+                Text {
+                    visible: lesson-show-answer;
+                    text: card-answer;
+                    wrap: word-wrap;
+                    font-size: Styling.default-bigger-font-size;
+                }
+            }
+        }
+    }
+}

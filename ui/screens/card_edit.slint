@@ -1,0 +1,56 @@
+import { VerticalBox, ScrollView, TextEdit } from "std-widgets.slint";
+import { Styling, Toolbar } from "components/common.slint";
+import { UiCard } from "../models/ui_card.slint";
+
+export component CardEditView {
+    
+    in-out property <int> card-id;
+    in-out property <string> card-question;
+    in-out property <string> card-answer;
+
+    pure callback show-card-list();
+    pure callback remove-card(int);
+    pure callback save-card-edit(int, string, string);
+
+    VerticalBox {
+        Toolbar {
+            has-back: true;
+            has-action: true;
+            has-action2: true;
+            title: "Edit";
+            on-back-button => {
+                show-card-list();
+            }
+            action-title: "Delete";
+            on-action-button => {
+                remove-card(card-id);
+                show-card-list();
+            }
+            action2-title: "Save";
+            on-action2-button => {
+                save-card-edit(card-id, card-question, card-answer);
+                show-card-list();
+            }
+        }
+        ScrollView {
+            VerticalBox {
+                Text {
+                    text: "Question:";
+                    font-size: Styling.hint-font-size;
+                }
+                TextEdit {
+                    text <=> card-question;
+                    font-size: Styling.default-font-size;
+                }
+                Text {
+                    text: "Answer:";
+                    font-size: Styling.hint-font-size;
+                }
+                TextEdit {
+                    text <=> card-answer;
+                    font-size: Styling.default-font-size;
+                }
+            }
+        }
+    }
+}

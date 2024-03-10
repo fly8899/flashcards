@@ -1,0 +1,64 @@
+import { VerticalBox, ListView, HorizontalBox , GridBox} from "std-widgets.slint";
+import { Styling, Toolbar, DefaultButton, Divider  } from "components/common.slint";
+import { UiCard } from "../models/ui_card.slint";
+
+export component CardListView {
+
+    in property <[UiCard]> card-list;
+
+    pure callback show-card-add();
+    pure callback show-card-edit(int, string, string);
+    pure callback show-lesson();
+    pure callback remove-card(int);
+
+
+    VerticalBox {
+        Toolbar {
+            has-back: false;
+            has-action: card-list.length != 0;
+            has-action2: true;
+            title: "Flashcards";
+            action-title: "Start Lesson";
+            on-action-button => {
+                show-lesson();
+            }
+            action2-title: "Add Card";
+            on-action2-button => {
+                show-card-add();
+            }
+        }
+        ListView {
+            for card in card_list: 
+                VerticalBox {
+                    Text {
+                        font-size: Styling.default-font-size;
+                        wrap: word-wrap;
+                        text: card.question;
+                    }
+                    Text {
+                        font-size: Styling.default-font-size;
+                        wrap: word-wrap;
+                        text: card.answer;
+                    }
+                    HorizontalBox {
+                        alignment: end;
+                        DefaultButton {
+                            text: "Delete";
+                            clicked => {
+                                remove-card(card.id);
+                            }
+                        }
+                        DefaultButton {
+                            text: "Edit";
+                            clicked => {
+                                show-card-edit(card.id, card.question, card.answer);
+                            }
+                        }
+                    }
+                    Divider {
+                        visible: card_list.length != 1 && card.id != card-list[card-list.length - 1].id;
+                    }
+                }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+import { ProgressIndicator, VerticalBox } from "std-widgets.slint";
+
+export component LoadingView {
+    VerticalBox {
+        ProgressIndicator {
+            width: 50px;
+            height: 10px;
+            indeterminate: true;
+        }
+    }
+}
